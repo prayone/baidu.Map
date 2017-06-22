@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
+	<script src="jquery.min.js"></script>
+	<script src="./bootstrap/bootstrap.min.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.1"></script> 
+	<script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.2&services=true"></script>
+	<style>
+		.box{
+			width: 600px;
+			margin:100px auto;
+			display: block;
+			height: 200px;
+		}
+		#container{
+			width: 100%;
+			height: 100%;
+			padding: 0;
+			margin: 0;
+
+		}
+		#xianshi{
+			width: 570px;
+			height: 305px;
+		}
+	</style>
+
+</head>
+<body>
+	<div class="box" data-toggle="myModal" onclick="showMap();">
+		经纬度
+		<input type="text" id="position" >
+	</div>
+	<div class="xianshi" id="xianshi">
+		
+	</div>
+	<script type="text/javascript">
+		
+			function setmap(){
+				 var str=$('#positionMap').val();
+						    var arr=[];
+						      arr=str.split(",");
+                           var map = new BMap.Map("xianshi"); //创建Map实例
+                           var point = new BMap.Point(arr[0],arr[1]);//创建点坐标  默认西安
+                           map.centerAndZoom(point, 13); //初始化地图,设置中心点坐标和地图级别。
+						   setTimeout(function(){
+							   map.setZoom(14);
+						   }, 2000);  //2秒后放大到14级
+						   map.enableScrollWheelZoom(true);
+							   map.clearOverlays();
+							   var icons = "./img/1.png"; //这个是你要显示坐标的图片的相对路径
+							   var icon = new BMap.Icon(icons, new BMap.Size(30, 53)); //显示图标大小
+							   var point1 = new BMap.Point(arr[0], arr[1]);
+							   var marker2 = new BMap.Marker(point1, {icon: icon});  // 创建标注
+							   map.addOverlay(marker2);
+			}
+                       </script>
+	<!-- 模态框 -->
+<div class="modal fade" id="myModal"><!--半透明黑色大框 fade属性为动画-->
+    <div class="modal-dialog"> <!--宽/高/定位-->
+        <div class="modal-content"><!--边框/背景色/阴影-->
+            <div class="modal-header">
+                <span class="close" data-dismiss="modal">&times;</span><!--关闭按钮-->
+                <div class="addnote">
+                   <span>添加便签</span>
+                </div>
+            </div>
+            <div class="modal-body text-center">
+             <div class="boxmap" id="container" style="min-height:300px;"></div>
+               <script type="text/javascript">
+                           var map = new BMap.Map("container"); //创建Map实例
+                           var point = new BMap.Point(108.960653,34.272172);//创建点坐标  默认西安
+                           map.centerAndZoom(point, 13); //初始化地图,设置中心点坐标和地图级别。
+						   setTimeout(function(){
+							   map.setZoom(14);
+						   }, 2000);  //2秒后放大到14级
+						   map.enableScrollWheelZoom(true);
+
+                           map.addEventListener("click", function (e) {
+                               //var aa=e.point.lng + "," + e.point.lat;
+							   //清楚之前的覆盖物
+							   map.clearOverlays();
+
+							   var aa = e.point.lng + "," + e.point.lat;
+							   //给点击的坐标上添加标注
+							   var icons = "./img/1.png"; //这个是你要显示坐标的图片的相对路径
+							   var icon = new BMap.Icon(icons, new BMap.Size(30, 53)); //显示图标大小
+							   var point1 = new BMap.Point(e.point.lng, e.point.lat);
+							   var marker2 = new BMap.Marker(point1, {icon: icon});  // 创建标注
+							   map.addOverlay(marker2);
+                               $('#positionMap').val(aa);
+                           });
+                       </script>
+                       <input type="hidden" id="positionMap" name="positionMap" value="">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" id="sign-in" onclick="dtqr()">确定</button>
+                <button class="btn btn-danger" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+	function showMap(){
+			$('#myModal').addClass("modal");
+        $('#myModal').modal('show');
+    }
+	
+	//将选中的经纬度添加到文本框中
+	function dtqr(){
+        var p=$('#positionMap').val();
+        $('#position').val(p);
+        console.log(p)
+         $('#myModal').modal('hide');
+         setmap();
+		}
+</script>
