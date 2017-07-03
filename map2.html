@@ -30,9 +30,9 @@
 
 </head>
 <body>
-	<div class="box" data-toggle="myModal" onclick="showMap();">
+	<div class="box" data-toggle="myModal" >
 		经纬度
-		<input type="text" id="position" >
+		<input type="text" id="position" onclick="showMap();" >
 	</div>
 	<div class="xianshi" id="xianshi">
 		
@@ -64,9 +64,23 @@
         <div class="modal-content"><!--边框/背景色/阴影-->
             <div class="modal-header">
                 <span class="close" data-dismiss="modal">&times;</span><!--关闭按钮-->
-                <div class="addnote">
-                   <span>添加便签</span>
-                </div>
+                <div id="r-result">
+					城市名: <input id="cityName" type="text" style="width:100px; margin-right:10px;" />
+						<input type="button" value="查询" onclick="theLocation()" />
+				</div>
+				<script>
+					// 百度地图搜索显示城市功能
+					// var map = new BMap.Map("allmap");
+					var point = new BMap.Point(116.331398,39.897445);
+					map.centerAndZoom(point,11);
+
+					function theLocation(){
+						var city = document.getElementById("cityName").value;
+						if(city != ""){
+							map.centerAndZoom(city,11);      // 用城市名设置地图中心点
+						}
+					}
+				</script>
             </div>
             <div class="modal-body text-center">
              <div class="boxmap" id="container" style="min-height:300px;"></div>
